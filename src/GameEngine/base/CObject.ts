@@ -11,12 +11,16 @@ interface IObject {
   getHeight: () => number;
 }
 
-export default class CObject {
-  position: vector = { x: 0, y: 0 };
-  width: number = 0;
-  height: number = 0;
+export default abstract class CObject {
+  position: vector;
+  width: number;
+  height: number;
 
-  constructor() {}
+  constructor() {
+    this.position = { x: 0, y: 0 };
+    this.width = 0;
+    this.height = 0;
+  }
   setPosition(x: number, y: number) {
     this.position = { x, y };
   }

@@ -38,6 +38,7 @@ export default class CAnimation implements IANIMATION {
             _configAnimationTemp.repeat = repeat;
             _configAnimationTemp.drawImage = this.drawSingleAnimation;
             _configAnimationTemp.name = keyAnimation;
+            _configAnimationTemp.key = Math.floor(Math.random() * Date.now());
             CAnimation.arrDrawAnimation.push(_configAnimationTemp);
           }
         }

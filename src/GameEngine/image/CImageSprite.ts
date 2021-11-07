@@ -1,21 +1,43 @@
-import CObject from "../base/CObject";
 import type { IFRAMEINSPRITE } from "../utils/type";
+import CAdd from "../add/CAdd";
+import CImage from "./CImage";
+import CObject from "../base/CObject";
 interface IImageSprite {
-  name: string;
-  imageSprite: HTMLImageElement;
-  getName: () => string;
-  getImageSprite: () => HTMLImageElement;
-  setName: (name: string) => void;
-  setImageSprite: (url: string) => void;
   getFrameInSprite: () => Array<IFRAMEINSPRITE>;
   setFrameInSprite: (frameInSprite: Array<IFRAMEINSPRITE>) => void;
 }
-export default class CImageSprite extends CObject implements IImageSprite {
-  name: string = "";
-  imageSprite: HTMLImageElement = new Image();
-  frameInSprite: Array<IFRAMEINSPRITE> = [];
+export default class CImageSprite extends CObject {
+  frameInSprite: Array<IFRAMEINSPRITE>;
+  name: string;
+  image: HTMLImageElement;
+  key: number;
+  isDraw: boolean;
   constructor() {
     super();
+    this.frameInSprite = [];
+    this.name = "";
+    this.image = new Image();
+    this.key = 0;
+    this.isDraw = false;
+  }
+  setIsDraw(isDraw: boolean) {
+    this.isDraw = isDraw;
+  }
+  getIsDraw() {
+    return this.isDraw;
+  }
+
+  setName(name: string) {
+    this.name = name;
+  }
+  setImage(url: string) {
+    this.image.src = url;
+  }
+  getName() {
+    return this.name;
+  }
+  getImage() {
+    return this.image;
   }
   getFrameInSprite() {
     return JSON.parse(JSON.stringify(this.frameInSprite));
@@ -23,16 +45,9 @@ export default class CImageSprite extends CObject implements IImageSprite {
   setFrameInSprite(frameInSprite: Array<IFRAMEINSPRITE>) {
     this.frameInSprite = JSON.parse(JSON.stringify(frameInSprite));
   }
-  getName() {
-    return this.name;
-  }
-  getImageSprite() {
-    return this.imageSprite;
-  }
-  setName(name: string) {
-    this.name = name;
-  }
-  setImageSprite(url: string) {
-    this.imageSprite.src = url;
+  destroy() {
+    CAdd.arrDrawImageSprite = CAdd.arrDrawImageSprite.filter(
+      (_e) => _e.key !== this.key
+    );
   }
 }

@@ -80,29 +80,43 @@ export default class ScenesStart extends CScenes {
         sHeight: 80,
       },
       {
-        key: "PTerodactyl",
+        key: "PTerodactyl1",
         sPosition: { x: 260, y: 0 },
         sWidth: 90,
         sHeight: 70,
       },
+      {
+        key: "PTerodactyl2",
+        sPosition: { x: 350, y: 0 },
+        sWidth: 90,
+        sHeight: 70,
+      },
+      {
+        key: "btnRestart",
+        sPosition: { x: 0, y: 0 },
+        sWidth: 75,
+        sHeight: 70,
+      },
+      {
+        key: "txtGameOver",
+        sPosition: { x: 955, y: 25 },
+        sWidth: 380,
+        sHeight: 30,
+      }
+
     ];
     this.load.imageSprite("mainSprite", "./assets/sprite.png", frameInSprite);
   }
   create() {
     //draw Image
     this.add.image(350, 150, 100, 100, "btnStart");
-
     //draw Text
     this.add.text("TextForStart", 320, 270, "Click to start", "Arial", 30);
     //draw ground
     this.add.imageSprite(0, 320, 1600, 30, "mainSprite", "ground");
     //draw dinos
     this.add.imageSprite(15, 282, 60, 70, "mainSprite", "dinos");
-
     this.input.onClick(this.onClickStart);
-  }
-  handleArrowUp() {
-    console.log("handle ArrowUp");
   }
   handleClickStart(e: MouseEvent) {
     if (
@@ -115,5 +129,4 @@ export default class ScenesStart extends CScenes {
       this.input.removeOnClick(this.onClickStart);
     }
   }
-  update() {}
 }

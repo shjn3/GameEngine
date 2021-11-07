@@ -20,7 +20,7 @@ export default class CLoad implements ILOAD {
   imageSprite(name: string, url: string, frameInSprite: Array<IFRAMEINSPRITE>) {
     let _imageSpriteTemp = new CImageSprite();
     _imageSpriteTemp.setName(name);
-    _imageSpriteTemp.setImageSprite(url);
+    _imageSpriteTemp.setImage(url);
     _imageSpriteTemp.setFrameInSprite(frameInSprite);
     CLoad.arrImageSprite.push(_imageSpriteTemp);
   }

@@ -47,18 +47,20 @@ export default class CScenes implements ISCENES {
     }
     if (CAdd.arrDrawImageSprite.length > 0) {
       CAdd.arrDrawImageSprite.forEach((_e) => {
-        CGame.ctx.beginPath();
-        CGame.ctx.drawImage(
-          _e.imageSprite,
-          _e.frameInSprite[0].sPosition.x,
-          _e.frameInSprite[0].sPosition.y,
-          _e.frameInSprite[0].sWidth,
-          _e.frameInSprite[0].sHeight,
-          _e.position.x,
-          _e.position.y,
-          _e.width,
-          _e.height
-        );
+        if (_e.isDraw) {
+          CGame.ctx.beginPath();
+          CGame.ctx.drawImage(
+            _e.image,
+            _e.frameInSprite[0].sPosition.x,
+            _e.frameInSprite[0].sPosition.y,
+            _e.frameInSprite[0].sWidth,
+            _e.frameInSprite[0].sHeight,
+            _e.position.x,
+            _e.position.y,
+            _e.width,
+            _e.height
+          );
+        }
       });
     }
     if (CAnimation.arrDrawAnimation.length > 0) {
@@ -118,6 +120,7 @@ export default class CScenes implements ISCENES {
     CAdd.arrDrawImageSprite = [];
     CAdd.arrText = [];
     CAdd.arrDrawImage = [];
+    CAnimation.arrDrawAnimation = [];
     CGame.ctx.clearRect(0, 0, CGame.canvas.width, CGame.canvas.height);
     this.draw();
     this.isActive = false;

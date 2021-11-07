@@ -6,6 +6,7 @@ export default class CConfigAnimation implements ICONFIGANIMATION {
   mainFrame: number = 0;
   timer: number = 0;
   name: string = "";
+  key: number = 0;
 
   constructor() {}
 }
