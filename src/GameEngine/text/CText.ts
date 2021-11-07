@@ -25,15 +25,7 @@ export default class CText extends CObject implements ITEXT {
     super();
   }
   destroy() {
-    let lenArrText = CAdd.arrText.length;
-    if (lenArrText > 0) {
-      for (let i = 0; i < lenArrText; i++) {
-        if (CAdd.arrText[i].key === this.key) {
-          CAdd.arrText.splice(i, i + 1);
-          break;
-        }
-      }
-    }
+    CAdd.arrText = CAdd.arrText.filter((_e) => _e.key === this.key);
   }
   setName(name: string) {
     this.name = name;

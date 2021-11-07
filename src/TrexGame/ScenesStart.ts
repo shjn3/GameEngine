@@ -1,8 +1,11 @@
 import CScenes from "../GameEngine/scenes/CScenes";
 
 export default class ScenesStart extends CScenes {
+  eventClick: any;
+  onClickStart: (e: MouseEvent) => void;
   constructor() {
     super("start");
+    this.onClickStart = (e: MouseEvent) => this.handleClickStart(e);
   }
 
   preload() {
@@ -72,15 +75,15 @@ export default class ScenesStart extends CScenes {
       },
       {
         key: "cactusLarge",
-        sPosition: { x: 1335, y: 0 },
-        sWidth: 95,
-        sHeight: 110,
+        sPosition: { x: 650, y: 0 },
+        sWidth: 50,
+        sHeight: 80,
       },
       {
         key: "PTerodactyl",
-        sPosition: { x: 1335, y: 0 },
-        sWidth: 95,
-        sHeight: 110,
+        sPosition: { x: 260, y: 0 },
+        sWidth: 90,
+        sHeight: 70,
       },
     ];
     this.load.imageSprite("mainSprite", "./assets/sprite.png", frameInSprite);
@@ -95,16 +98,22 @@ export default class ScenesStart extends CScenes {
     this.add.imageSprite(0, 320, 1600, 30, "mainSprite", "ground");
     //draw dinos
     this.add.imageSprite(15, 282, 60, 70, "mainSprite", "dinos");
-    this.input.onClick((e: MouseEvent) => {
-      if (
-        e.offsetX > 350 &&
-        e.offsetX < 450 &&
-        e.offsetY > 150 &&
-        e.offsetY < 250
-      ) {
-        this.changeScenes("play");
-      }
-    });
+
+    this.input.onClick(this.onClickStart);
+  }
+  handleArrowUp() {
+    console.log("handle ArrowUp");
+  }
+  handleClickStart(e: MouseEvent) {
+    if (
+      e.offsetX > 350 &&
+      e.offsetX < 450 &&
+      e.offsetY > 150 &&
+      e.offsetY < 250
+    ) {
+      this.changeScenes("play");
+      this.input.removeOnClick(this.onClickStart);
+    }
   }
   update() {}
 }

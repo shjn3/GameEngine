@@ -45,17 +45,6 @@ export default class CScenes implements ISCENES {
         }
       });
     }
-    if (CAdd.arrText.length > 0) {
-      CAdd.arrText.forEach((_e) => {
-        let text = _e.getText();
-        let size = _e.getSize();
-        let font = _e.getFont();
-        let { x, y } = _e.getPosition();
-        CGame.ctx.beginPath();
-        CGame.ctx.font = `${size}px ${font}`;
-        CGame.ctx.fillText(`${text}`, x, y);
-      });
-    }
     if (CAdd.arrDrawImageSprite.length > 0) {
       CAdd.arrDrawImageSprite.forEach((_e) => {
         CGame.ctx.beginPath();
@@ -98,6 +87,17 @@ export default class CScenes implements ISCENES {
         );
       });
     }
+    if (CAdd.arrText.length > 0) {
+      CAdd.arrText.forEach((_e) => {
+        let text = _e.getText();
+        let size = _e.getSize();
+        let font = _e.getFont();
+        let { x, y } = _e.getPosition();
+        CGame.ctx.beginPath();
+        CGame.ctx.font = `${size}px ${font}`;
+        CGame.ctx.fillText(`${text}`, x, y);
+      });
+    }
   }
 
   update() {}
@@ -109,6 +109,9 @@ export default class CScenes implements ISCENES {
       this.draw();
       this.update();
     }
+  }
+  destroy() {
+    window.cancelAnimationFrame(this.idRequestAnimation);
   }
   changeScenes(name: string) {
     CAnimation.arrConfigAnimation = [];

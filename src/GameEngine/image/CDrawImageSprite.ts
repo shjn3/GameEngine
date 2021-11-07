@@ -7,15 +7,8 @@ export default class CDrawImageSprite extends CImageSprite {
     super();
   }
   destroy() {
-    let lengthDrawImageSprite = CAdd.arrDrawImageSprite.length;
-    if (lengthDrawImageSprite > 0) {
-      for (let i = 0; i < lengthDrawImageSprite; i++) {
-        if (CAdd.arrDrawImageSprite[i].key === this.key) {
-          CAdd.arrDrawImageSprite.splice(i, i + 1);
-          console.log(CAdd.arrDrawImageSprite);
-          break;
-        }
-      }
-    }
+    CAdd.arrDrawImageSprite = CAdd.arrDrawImageSprite.filter(
+      (_e) => _e.key !== this.key
+    );
   }
 }

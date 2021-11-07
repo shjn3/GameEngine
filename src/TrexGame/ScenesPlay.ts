@@ -3,15 +3,22 @@ import CAnimation from "../GameEngine/animation/CAnimation";
 import CDrawImage from "../GameEngine/image/CDrawImage";
 import CDrawImageSprite from "../GameEngine/image/CDrawImageSprite";
 import CImageSprite from "../GameEngine/image/CImageSprite";
+import CText from "../GameEngine/text/CText";
 
 export default class ScenesPlay extends CScenes {
   maxCloud: number = 6;
   btnStart: CDrawImage = new CDrawImage();
   arrCloud: Array<CDrawImageSprite> = [];
   player: CAnimation = new CAnimation();
-  obstacles: Array<CImageSprite> = [];
+  obstacles: Array<CDrawImageSprite> = [];
   jumpVelocity: number = -13;
   gameOver: boolean = false;
+  score: number = 0;
+  arrGround: Array<CDrawImageSprite> = [];
+  textScore: CText = new CText();
+  textHightScore: CText = new CText();
+  heightScore: number = 0;
+  timer: number = 0;
   constructor() {
     super("play");
   }
@@ -24,13 +31,39 @@ export default class ScenesPlay extends CScenes {
     this.createPlayer();
     //draw Obstacles
     this.createObstacles();
-
+    this.createScore();
     //create event input
     this.createEvent();
   }
+  createScore() {
+    this.textScore = this.add.text(
+      "TextForScore",
+      600,
+      30,
+      "Score: 0",
+      "Arial",
+      20
+    );
+    this.textHightScore = this.add.text(
+      "TextForScore",
+      600,
+      60,
+      `Hight Score: ${this.heightScore}`,
+      "Arial",
+      20
+    );
+  }
   createGround() {
-    this.add.imageSprite(0, 320, 1600, 30, "mainSprite", "ground");
-    this.add.imageSprite(1600, 320, 1600, 30, "mainSprite", "ground");
+    this.arrGround.push(
+      <CDrawImageSprite>(
+        this.add.imageSprite(0, 320, 1600, 30, "mainSprite", "ground")
+      )
+    );
+    this.arrGround.push(
+      <CDrawImageSprite>(
+        this.add.imageSprite(1600, 320, 1600, 30, "mainSprite", "ground")
+      )
+    );
   }
   createCloud() {
     this.arrCloud.push(
@@ -98,24 +131,112 @@ export default class ScenesPlay extends CScenes {
   }
   createObstacles() {
     this.obstacles.push(
-      this.add.imageSprite(300, 295, 30, 45, "mainSprite", "cactusSmall")
+      <CDrawImageSprite>(
+        this.add.imageSprite(400, 295, 30, 45, "mainSprite", "cactusSmall")
+      )
     );
   }
   //======================================== update
   update() {
     if (!this.gameOver) {
-      //update array Cloud
-      //this.updateObstacles();
+      this.updateGround();
+      this.updateScore();
+      this.updateObstacles();
       this.updateCloud();
       this.updatePlayerJump();
       this.CollisionDetection();
+    } else {
+      this.updateHightScore();
+    }
+  }
+  updateGround() {
+    if (this.arrGround.length > 0) {
+      this.arrGround[0].position.x += -2;
+      this.arrGround[1].position.x += -2;
+      if (this.arrGround[0].position.x < -1600) {
+        this.arrGround[0].destroy();
+        this.arrGround.splice(0, 1);
+        this.arrGround.push(
+          <CDrawImageSprite>(
+            this.add.imageSprite(1600, 320, 1600, 30, "mainSprite", "ground")
+          )
+        );
+      }
+    }
+  }
+  updateHightScore() {
+    this.heightScore = Math.max(this.heightScore, this.score);
+    this.textHightScore.setText(`Hight Score: ${this.heightScore}`);
+  }
+  updateScore() {
+    this.timer++;
+    if (this.timer > 50) {
+      this.timer = 0;
+      this.score++;
+      this.textScore.setText(`Score: ${this.score}`);
     }
   }
   updateObstacles() {
     if (this.obstacles.length > 0) {
-      this.obstacles[0].position.x -= 2;
-      if (this.obstacles[0].position.x + 100 < 0)
-        this.obstacles[0].position.x = 500;
+      this.obstacles.forEach((_e) => (_e.position.x -= 2));
+      let randomGap = this.getRandom(300, 600);
+      if (
+        this.obstacles[this.obstacles.length - 1].position.x +
+          this.obstacles[this.obstacles.length - 1].width +
+          randomGap <
+        800
+      ) {
+        let randomType = this.getRandom(0, 2);
+
+        switch (randomType) {
+          case 0:
+            this.obstacles.push(
+              <CDrawImageSprite>(
+                this.add.imageSprite(
+                  800,
+                  295,
+                  30,
+                  45,
+                  "mainSprite",
+                  "cactusSmall"
+                )
+              )
+            );
+            break;
+          case 1:
+            this.obstacles.push(
+              <CDrawImageSprite>(
+                this.add.imageSprite(
+                  800,
+                  295,
+                  30,
+                  45,
+                  "mainSprite",
+                  "cactusLarge"
+                )
+              )
+            );
+            break;
+          case 2:
+            this.obstacles.push(
+              <CDrawImageSprite>(
+                this.add.imageSprite(
+                  800,
+                  295,
+                  30,
+                  45,
+                  "mainSprite",
+                  "PTerodactyl"
+                )
+              )
+            );
+            break;
+        }
+        if (this.obstacles[0].position.x + this.obstacles[0].width < 0) {
+          this.obstacles[0].destroy();
+          this.obstacles.splice(0, 1);
+        }
+      }
     }
   }
   updatePlayerJump() {
@@ -169,10 +290,8 @@ export default class ScenesPlay extends CScenes {
         );
         this.arrCloud.push(_cloud);
       }
-
       if (this.arrCloud[0].position.x + this.arrCloud[0].width < 0) {
         this.arrCloud[0].destroy();
-        console.log(this.obstacles);
         this.arrCloud.splice(0, 1);
       }
     }

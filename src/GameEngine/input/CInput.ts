@@ -14,6 +14,9 @@ export default class CInput {
     });
   }
   onClick(callback: (e: MouseEvent) => void) {
-    CGame.canvas.addEventListener("click", (e) => callback(e));
+    CGame.canvas.addEventListener("click", callback);
+  }
+  removeOnClick(callback: (e: MouseEvent) => void) {
+    CGame.canvas.removeEventListener("click", callback, false);
   }
 }

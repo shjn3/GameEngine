@@ -77,7 +77,6 @@ export default class CAdd implements IADD {
         }
       }
     }
-    return new CImageSprite();
   }
 
   text(
@@ -96,6 +95,7 @@ export default class CAdd implements IADD {
     _textTemp.setText(text);
     _textTemp.key = Math.floor(Math.random() * Date.now());
     CAdd.arrText.push(_textTemp);
+    return _textTemp;
   }
 
   spriteSheet(
