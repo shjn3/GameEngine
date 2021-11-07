@@ -122,7 +122,7 @@ export default class ScenesPlay extends CScenes {
     this.animation.create(configDuckPlayer);
     this.animation.create(configJumpPlayer);
     this.animation.create(configDiePlayer);
-    this.player.drawSingleAnimation.y = 275;
+    this.player.drawSingleAnimation.y = 290;
     this.player.play("RunPlayer");
   }
   createEvent() {
@@ -136,11 +136,18 @@ export default class ScenesPlay extends CScenes {
         this.player.play("JumpPlayer");
     });
     this.input.keydown("ArrowDown", () => {
-      if (this.player.nameAnimation === "RunPlayer")
+      if (this.player.nameAnimation === "RunPlayer") {
+        this.player.drawSingleAnimation.y = 295;
+        this.player.drawSingleAnimation.width = 70;
+        this.player.drawSingleAnimation.height = 55;
         this.player.play("DuckPlayer");
+      }
     });
     this.input.keyup("ArrowDown", () => {
       if (this.player.nameAnimation === "DuckPlayer") {
+        this.player.drawSingleAnimation.y = 290;
+        this.player.drawSingleAnimation.width = 60;
+        this.player.drawSingleAnimation.height = 70;
         this.player.play("RunPlayer");
       }
     });
@@ -158,7 +165,6 @@ export default class ScenesPlay extends CScenes {
           this.obstaclesPTerodactyl = [];
           this.obstaclesCactus = [];
           this.score = 0;
-          this.player = new CAnimation();
           this.timer = 0;
           this.changeScenes("start");
         }
@@ -166,9 +172,9 @@ export default class ScenesPlay extends CScenes {
     });
   }
   createObstacles() {
-    this.obstaclesCactus.push(
-      this.add.imageSprite(800, 295, 30, 45, "mainSprite", "cactusSmall")
-    );
+    // this.obstaclesCactus.push(
+    //   this.add.imageSprite(800, 295, 30, 45, "mainSprite", "cactusSmall")
+    // );
     let configObstaclesPterodactyl = {
       key: "PTerodactyl",
       frames: ["PTerodactyl1", "PTerodactyl2"],
@@ -177,7 +183,7 @@ export default class ScenesPlay extends CScenes {
     };
     this.animation.create(configObstaclesPterodactyl);
     this.obstaclesPTerodactyl.push(
-      <CAnimation>this.add.spriteSheet(1000, 290, 50, 30, "mainSprite")
+      <CAnimation>this.add.spriteSheet(1000, 265, 50, 30, "mainSprite")
     );
     this.obstaclesPTerodactyl[0].play("PTerodactyl");
   }
@@ -254,7 +260,7 @@ export default class ScenesPlay extends CScenes {
 
     let randomGap = this.getRandom(300, 600);
     if (maxWidth + randomGap < 800) {
-      let randomType = this.getRandom(2, 2); //1 cactus 2 pterodactyl
+      let randomType = this.getRandom(1, 2); //1 cactus 2 pterodactyl
       switch (randomType) {
         case 1:
           let randomSize = this.getRandom(2, 3);
@@ -281,19 +287,9 @@ export default class ScenesPlay extends CScenes {
               )
             );
           }
-          if (lengthCactus > 0) {
-            if (
-              this.obstaclesCactus[0].position.x +
-                this.obstaclesCactus[0].width <
-              0
-            ) {
-              this.obstaclesCactus[0].destroy();
-              this.obstaclesCactus.splice(0, 1);
-            }
-          }
           break;
         case 2:
-          let height = [290, 270, 240];
+          let height = [290, 265, 240];
           let randomHeight = this.getRandom(0, 2);
           this.obstaclesPTerodactyl.push(
             <CAnimation>(
@@ -311,6 +307,24 @@ export default class ScenesPlay extends CScenes {
           break;
       }
     }
+    if (this.obstaclesCactus.length > 0) {
+      if (
+        this.obstaclesCactus[0].position.x + this.obstaclesCactus[0].width <
+        0
+      ) {
+        this.obstaclesCactus[0].destroy();
+        this.obstaclesCactus.splice(0, 1);
+      }
+    }
+    if (this.obstaclesPTerodactyl.length > 0) {
+      if (
+        this.obstaclesPTerodactyl[0].drawSingleAnimation.x +
+          this.obstaclesPTerodactyl[0].drawSingleAnimation.width <
+        0
+      ) {
+        this.obstaclesPTerodactyl.splice(0, 1);
+      }
+    }
   }
   updatePlayerJump() {
     if (this.player.nameAnimation === "JumpPlayer") {
@@ -326,12 +340,12 @@ export default class ScenesPlay extends CScenes {
   CollisionDetection() {
     if (this.obstaclesCactus.length > 0) {
       if (
-        this.obstaclesCactus[0].position.x >
+        this.obstaclesCactus[0].position.x + this.obstaclesCactus[0].width >
           this.player.drawSingleAnimation.x &&
         this.obstaclesCactus[0].position.x <
           this.player.drawSingleAnimation.x +
             this.player.drawSingleAnimation.width &&
-        this.obstaclesCactus[0].position.y >
+        this.obstaclesCactus[0].position.y + this.obstaclesCactus[0].height >
           this.player.drawSingleAnimation.y &&
         this.obstaclesCactus[0].position.y <
           this.player.drawSingleAnimation.y +
@@ -341,27 +355,28 @@ export default class ScenesPlay extends CScenes {
         this.player.play("DiePlayer");
       }
     }
-    // if (
-    //   this.obstaclesPTerodactyl.length > 0 &&
-    //   this.player.drawSingleAnimation !== undefined
-    // ) {
-    //   if (
-    //     this.obstaclesPTerodactyl[0].drawSingleAnimation.x >
-    //       this.player.drawSingleAnimation.x &&
-    //     this.obstaclesPTerodactyl[0].drawSingleAnimation.x <
-    //       this.player.drawSingleAnimation.x +
-    //         this.player.drawSingleAnimation.width &&
-    //     this.obstaclesPTerodactyl[0].drawSingleAnimation.y >
-    //       this.player.drawSingleAnimation.y &&
-    //     this.obstaclesPTerodactyl[0].drawSingleAnimation.y <
-    //       this.player.drawSingleAnimation.y +
-    //         this.player.drawSingleAnimation.height
-    //   ) {
-    //     console.log("abc");
-    //     this.gameOver = true;
-    //     this.player.play("DiePlayer");
-    //   }
-    // }
+    if (
+      this.obstaclesPTerodactyl.length > 0 &&
+      this.player.drawSingleAnimation !== undefined
+    ) {
+      if (
+        this.obstaclesPTerodactyl[0].drawSingleAnimation.x +
+          this.obstaclesPTerodactyl[0].drawSingleAnimation.width >
+          this.player.drawSingleAnimation.x &&
+        this.obstaclesPTerodactyl[0].drawSingleAnimation.x <
+          this.player.drawSingleAnimation.x +
+            this.player.drawSingleAnimation.width &&
+        this.obstaclesPTerodactyl[0].drawSingleAnimation.y +
+          this.obstaclesPTerodactyl[0].drawSingleAnimation.height >
+          this.player.drawSingleAnimation.y &&
+        this.obstaclesPTerodactyl[0].drawSingleAnimation.y <
+          this.player.drawSingleAnimation.y +
+            this.player.drawSingleAnimation.height
+      ) {
+        this.gameOver = true;
+        this.player.play("DiePlayer");
+      }
+    }
   }
   updateCloud() {
     if (this.arrCloud.length > 0) {

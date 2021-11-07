@@ -25,7 +25,6 @@ export default class CScenes implements ISCENES {
     this.isActive = isActive;
   }
   active() {
-    this.loop();
     this.preload();
     this.create();
     this.loop();
@@ -105,12 +104,10 @@ export default class CScenes implements ISCENES {
   update() {}
 
   loop() {
-    if (this.isActive) {
-      this.idRequestAnimation = window.requestAnimationFrame(() => this.loop());
-      CGame.ctx.clearRect(0, 0, CGame.canvas.width, CGame.canvas.height);
-      this.draw();
-      this.update();
-    }
+    this.idRequestAnimation = window.requestAnimationFrame(() => this.loop());
+    CGame.ctx.clearRect(0, 0, CGame.canvas.width, CGame.canvas.height);
+    this.draw();
+    this.update();
   }
   destroy() {
     window.cancelAnimationFrame(this.idRequestAnimation);
