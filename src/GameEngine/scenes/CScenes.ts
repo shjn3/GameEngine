@@ -4,12 +4,7 @@ import CAdd from "../add/CAdd";
 import CAnimation from "../animation/CAnimation";
 import CInput from "../input/CInput";
 
-interface ISCENES {
-  status_game: 0 | 1 | 2; //0: Game start, 1: Game play, 2: Game end
-  load: CLoad;
-}
-export default class CScenes implements ISCENES {
-  status_game: 0 | 1 | 2 = 0;
+export default class CScenes {
   load: CLoad = new CLoad();
   add: CAdd = new CAdd();
   animation: CAnimation = new CAnimation();
@@ -109,9 +104,7 @@ export default class CScenes implements ISCENES {
     this.draw();
     this.update();
   }
-  destroy() {
-    window.cancelAnimationFrame(this.idRequestAnimation);
-  }
+
   changeScenes(name: string) {
     CAnimation.arrConfigAnimation = [];
     CAdd.arrDrawImageSprite = [];

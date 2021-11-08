@@ -21,6 +21,7 @@ export default class ScenesPlay extends CScenes {
   textHightScore: CText = new CText();
   heightScore: number = 0;
   timer: number = 0;
+  velocity: number = -3;
   constructor() {
     super("play");
   }
@@ -204,8 +205,8 @@ export default class ScenesPlay extends CScenes {
   }
   updateGround() {
     if (this.arrGround.length > 0) {
-      this.arrGround[0].position.x += -2;
-      this.arrGround[1].position.x += -2;
+      this.arrGround[0].position.x += this.velocity;
+      this.arrGround[1].position.x += this.velocity;
       if (this.arrGround[0].position.x < -1600) {
         this.arrGround[0].destroy();
         this.arrGround.splice(0, 1);
@@ -231,11 +232,11 @@ export default class ScenesPlay extends CScenes {
     let lengthCactus = this.obstaclesCactus.length;
     let lengthPterodactyl = this.obstaclesPTerodactyl.length;
     if (lengthCactus > 0) {
-      this.obstaclesCactus.forEach((_e) => (_e.position.x -= 2));
+      this.obstaclesCactus.forEach((_e) => (_e.position.x += this.velocity));
     }
     if (lengthPterodactyl > 0) {
       this.obstaclesPTerodactyl.forEach(
-        (_e) => (_e.drawSingleAnimation.x -= 3)
+        (_e) => (_e.drawSingleAnimation.x += this.velocity - 1)
       );
     }
     let maxWidth = 0;
@@ -379,7 +380,7 @@ export default class ScenesPlay extends CScenes {
   }
   updateCloud() {
     if (this.arrCloud.length > 0) {
-      this.arrCloud.forEach((_e) => (_e.position.x -= 2));
+      this.arrCloud.forEach((_e) => (_e.position.x += this.velocity));
       if (
         this.arrCloud.length < this.maxCloud &&
         this.arrCloud[this.arrCloud.length - 1].position.x +
