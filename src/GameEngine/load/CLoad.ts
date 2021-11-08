@@ -15,6 +15,7 @@ export default class CLoad implements ILOAD {
     let _imageTemp = new CImage();
     _imageTemp.setName(name);
     _imageTemp.setImage(url);
+    _imageTemp.setKey(Math.floor(Math.random() * Date.now()));
     CLoad.arrImage.push(_imageTemp);
   }
   imageSprite(name: string, url: string, frameInSprite: Array<IFRAMEINSPRITE>) {
@@ -22,6 +23,7 @@ export default class CLoad implements ILOAD {
     _imageSpriteTemp.setName(name);
     _imageSpriteTemp.setImage(url);
     _imageSpriteTemp.setFrameInSprite(frameInSprite);
+    _imageSpriteTemp.setKey(Math.floor(Math.random() * Date.now()));
     CLoad.arrImageSprite.push(_imageSpriteTemp);
   }
 }

@@ -115,7 +115,7 @@ export default class ScenesPlay extends CScenes {
     let configDiePlayer = {
       key: "DiePlayer",
       frames: ["die"],
-      framerate: 60,
+      frameRate: 60,
       repeat: -1,
     };
     this.animation.create(configRunPlayer);
@@ -292,14 +292,12 @@ export default class ScenesPlay extends CScenes {
           let height = [290, 265, 240];
           let randomHeight = this.getRandom(0, 2);
           this.obstaclesPTerodactyl.push(
-            <CAnimation>(
-              this.add.spriteSheet(
-                800,
-                height[randomHeight],
-                50,
-                30,
-                "mainSprite"
-              )
+            this.add.spriteSheet(
+              800,
+              height[randomHeight],
+              50,
+              30,
+              "mainSprite"
             )
           );
           this.obstaclesPTerodactyl[lengthPterodactyl].play("PTerodactyl");
@@ -322,6 +320,7 @@ export default class ScenesPlay extends CScenes {
           this.obstaclesPTerodactyl[0].drawSingleAnimation.width <
         0
       ) {
+        this.obstaclesPTerodactyl[0].destroy();
         this.obstaclesPTerodactyl.splice(0, 1);
       }
     }

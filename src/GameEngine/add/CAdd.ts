@@ -83,13 +83,22 @@ export default class CAdd implements IADD {
     height: number,
     name: string
   ) {
-    let _spriteSheetAddTemp = CLoad.arrImageSprite.filter(
-      (_e) => _e.getName() === name
-    );
-    if (_spriteSheetAddTemp[0]) {
-      let _animation: CAnimation = new CAnimation();
-      let _image: HTMLImageElement = _spriteSheetAddTemp[0].image;
-      let _frameInSprite = _spriteSheetAddTemp[0].frameInSprite;
+    let _animation: CAnimation = new CAnimation();
+    let _idSpriteSheetAddTemp = -1;
+    CLoad.arrImageSprite.forEach((_e, index) => {
+      if (_e.getName() === name) {
+        _idSpriteSheetAddTemp = index;
+        return;
+      }
+    });
+    // let _spriteSheetAddTemp = CLoad.arrImageSprite.filter(
+    //   (_e) => _e.getName() === name
+    // );
+    if (_idSpriteSheetAddTemp !== -1) {
+      let _image: HTMLImageElement =
+        CLoad.arrImageSprite[_idSpriteSheetAddTemp].image;
+      let _frameInSprite =
+        CLoad.arrImageSprite[_idSpriteSheetAddTemp].frameInSprite;
       let temp = {
         image: _image,
         frameInSprite: _frameInSprite,
@@ -100,9 +109,8 @@ export default class CAdd implements IADD {
         frames: [],
       };
       _animation.drawSingleAnimation = temp;
-
-      return _animation;
     }
+    return _animation;
   }
   text(
     name: string,

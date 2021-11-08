@@ -23,6 +23,12 @@ export default class CImage extends CObject {
     this.key = 0;
     this.isDraw = false;
   }
+  setKey(key: number) {
+    this.key = key;
+  }
+  getKey() {
+    return this.key;
+  }
   setIsDraw(isDraw: boolean) {
     this.isDraw = isDraw;
   }

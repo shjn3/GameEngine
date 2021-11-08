@@ -1,5 +1,4 @@
-interface ICONFIGANIMATION {}
-export default class CConfigAnimation implements ICONFIGANIMATION {
+export default class CConfigAnimation {
   repeat: number = -1;
   frameRate: number = 60;
   drawImage: any;
