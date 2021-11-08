@@ -12,6 +12,7 @@
     "ts-loader": "^9.2.6",
     "typescript": "^4.4.4"
   },
+  "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress",
   "devDependencies": {
     "ts-node": "^10.4.0",
     "webpack": "^5.61.0",
