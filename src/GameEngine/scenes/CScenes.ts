@@ -3,6 +3,8 @@ import CGame from "../game/CGame";
 import CAdd from "../add/CAdd";
 import CAnimation from "../animation/CAnimation";
 import CInput from "../input/CInput";
+import CRectangle from "../shape/CRectangle";
+import CText from "../text/CText";
 
 export default class CScenes {
   load: CLoad = new CLoad();
@@ -16,17 +18,22 @@ export default class CScenes {
   constructor(nameScenes: string = "") {
     this.nameScenes = nameScenes;
   }
+  //check Scenes is show on screen
   setIsActive(isActive: boolean) {
     this.isActive = isActive;
   }
+  //use method when scenes active
   active() {
     this.preload();
     this.create();
     this.loop();
   }
+  //load image
   preload() {}
+  //create image before update
   create() {}
   draw() {
+    //draw array image
     if (CAdd.arrDrawImage.length > 0) {
       CAdd.arrDrawImage.forEach((_e) => {
         if (_e.isDraw) {
@@ -39,6 +46,7 @@ export default class CScenes {
         }
       });
     }
+    //draw image from sprite
     if (CAdd.arrDrawImageSprite.length > 0) {
       CAdd.arrDrawImageSprite.forEach((_e) => {
         if (_e.isDraw) {
@@ -57,6 +65,7 @@ export default class CScenes {
         }
       });
     }
+    //draw image with animation
     if (CAnimation.arrDrawAnimation.length > 0) {
       CAnimation.arrDrawAnimation.forEach((_e) => {
         _e.timer++;
@@ -83,6 +92,7 @@ export default class CScenes {
         );
       });
     }
+    //draw Text
     if (CAdd.arrText.length > 0) {
       CAdd.arrText.forEach((_e) => {
         let text = _e.getText();
@@ -92,6 +102,24 @@ export default class CScenes {
         CGame.ctx.beginPath();
         CGame.ctx.font = `${size}px ${font}`;
         CGame.ctx.fillText(`${text}`, x, y);
+      });
+    }
+    //draw Shape
+    if (CAdd.arrShape.length > 0) {
+      CAdd.arrShape.forEach((_e) => {
+        if (_e instanceof CRectangle) {
+          if (_e.isDraw) {
+            CGame.ctx.beginPath();
+            CGame.ctx.fillStyle = _e.color;
+            CGame.ctx.fillRect(
+              _e.position.x,
+              _e.position.y,
+              _e.width,
+              _e.height
+            );
+            CGame.ctx.fillStyle = "#000";
+          }
+        }
       });
     }
   }
@@ -104,7 +132,7 @@ export default class CScenes {
     this.draw();
     this.update();
   }
-
+  // change Scenes
   changeScenes(name: string) {
     CAnimation.arrConfigAnimation = [];
     CAdd.arrDrawImageSprite = [];

@@ -1,3 +1,5 @@
+//import { CleanWebpackPlugin } from "clean-webpack-plugin";
+
 const path = require("path");
 
 module.exports = {
@@ -19,4 +21,5 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, "public"),
   },
+  // plugins: [new CleanWebpackPlugin()],
 };

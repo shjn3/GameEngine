@@ -3,6 +3,8 @@ import CLoad from "../load/CLoad";
 import CText from "../text/CText";
 import CImage from "../image/CImage";
 import CImageSprite from "../image/CImageSprite";
+import CShape from "../shape/CShape";
+import CRectangle from "../shape/CRectangle";
 
 interface IADD {
   image: (
@@ -22,10 +24,11 @@ interface IADD {
   ) => void;
 }
 
-export default class CAdd implements IADD {
+export default class CAdd {
   static arrText: Array<CText> = [];
   static arrDrawImage: Array<CImage> = [];
   static arrDrawImageSprite: Array<CImageSprite> = [];
+  static arrShape: Array<CShape> = [];
   constructor() {}
   image(x: number, y: number, width: number, height: number, name: string) {
     let _imageAddTemp = CLoad.arrImage.filter((_e) => _e.getName() === name);
@@ -129,5 +132,20 @@ export default class CAdd implements IADD {
     _textTemp.key = Math.floor(Math.random() * Date.now());
     CAdd.arrText.push(_textTemp);
     return _textTemp;
+  }
+  rectangular(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    color: string
+  ) {
+    let temp = new CRectangle();
+    temp.position = { x, y };
+    temp.width = width;
+    temp.height = height;
+    temp.color = color;
+    CAdd.arrShape.push(temp);
+    return temp;
   }
 }

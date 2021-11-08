@@ -3,6 +3,7 @@ import CAnimation from "../GameEngine/animation/CAnimation";
 import CImage from "../GameEngine/image/CImage";
 import CImageSprite from "../GameEngine/image/CImageSprite";
 import CText from "../GameEngine/text/CText";
+import CRectangle from "../GameEngine/shape/CRectangle";
 
 export default class ScenesPlay extends CScenes {
   maxCloud: number = 6;
@@ -22,6 +23,7 @@ export default class ScenesPlay extends CScenes {
   heightScore: number = 0;
   timer: number = 0;
   velocity: number = -3;
+  bgGameOver: CRectangle = new CRectangle();
   constructor() {
     super("play");
   }
@@ -38,6 +40,8 @@ export default class ScenesPlay extends CScenes {
     //create event input
     this.createEvent();
     this.createGameOver();
+    this.bgGameOver = this.add.rectangular(0, 0, 800, 400, "rgba(0,0,0,.3)");
+    this.bgGameOver.isDraw = false;
   }
   createGameOver() {
     this.btnRestart = this.add.imageSprite(
@@ -167,6 +171,7 @@ export default class ScenesPlay extends CScenes {
           this.obstaclesCactus = [];
           this.score = 0;
           this.timer = 0;
+          this.bgGameOver.isDraw = false;
           this.changeScenes("start");
         }
       }
@@ -199,6 +204,7 @@ export default class ScenesPlay extends CScenes {
       this.CollisionDetection();
     } else {
       this.updateHightScore();
+      this.bgGameOver.isDraw = true;
       this.btnRestart.setIsDraw(true);
       this.txtGameOver.setIsDraw(true);
     }
