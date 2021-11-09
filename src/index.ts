@@ -1,4 +1,4 @@
-import CGame from "./GameEngine/game/CGame";
+import Game from "./GameEngine/game/Game";
 import { config } from "./TrexGame/config";
 
-let game = new CGame(config);
+let game = new Game(config);

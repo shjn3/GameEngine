@@ -1,27 +1,38 @@
-export interface vector {
+export interface IPosition {
   x: number;
   y: number;
 }
-
-export interface IFRAMEINSPRITE {
-  key: string;
-  sPosition: vector;
-  sWidth: number;
-  sHeight: number;
+export interface ISize {
+  width: number;
+  height: number;
 }
 
-export interface ICONFIGANIMATION {
+export interface IFrameInSprite {
   key: string;
-  frames: Array<string>;
+  sourcePosition: IPosition;
+  sourceSize: ISize;
+}
+
+export interface IConfigAnimation {
+  key: string;
+  frames: {
+    nameImage: string;
+    frames: Array<string>;
+  };
   frameRate: number;
-  repeat: number;
 }
-export interface IDRAWSINGLEANIMATION {
+export interface IConfigImageAnimation {
+  key: string;
+  frameInSpriteOfAnimation: Array<IFrameInSprite>;
+  frameRate: number;
+  image: HTMLImageElement;
+}
+export interface IImageAnimation {
   image: HTMLImageElement;
   x: number;
   y: number;
   width: number;
   height: number;
-  frameInSprite: IFRAMEINSPRITE;
-  frames: Array<IFRAMEINSPRITE>;
+  frameInSprite: Array<IFrameInSprite>;
+  frames: Array<IFrameInSprite>;
 }

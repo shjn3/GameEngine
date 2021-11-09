@@ -1,47 +1,54 @@
-import CScenes from "../GameEngine/scenes/CScenes";
-import CAnimation from "../GameEngine/animation/CAnimation";
-import CImage from "../GameEngine/image/CImage";
-import CImageSprite from "../GameEngine/image/CImageSprite";
-import CText from "../GameEngine/text/CText";
-import CRectangle from "../GameEngine/shape/CRectangle";
+import Scenes from "../GameEngine/scenes/Scenes";
+import Animation from "../GameEngine/animation/Animation";
+import ImageObject from "../GameEngine/image/ImageObject";
+import ImageSpriteObject from "../GameEngine/image/ImageSpriteObject";
+import Text from "../GameEngine/text/Text";
+import Rectangle from "../GameEngine/shape/Rectangle";
+import ImageAnimationObject from "../GameEngine/image/ImageAnimationObject";
 
-export default class ScenesPlay extends CScenes {
-  maxCloud: number = 6;
-  btnStart: CImage = new CImage();
-  btnRestart: CImageSprite = new CImageSprite();
-  txtGameOver: CImageSprite = new CImageSprite();
-  arrCloud: Array<CImageSprite> = [];
-  player: CAnimation = new CAnimation();
-  obstaclesCactus: Array<CImageSprite> = [];
-  obstaclesPTerodactyl: Array<CAnimation> = [];
-  jumpVelocity: number = -13;
-  gameOver: boolean = false;
-  score: number = 0;
-  arrGround: Array<CImageSprite> = [];
-  textScore: CText = new CText();
-  textHightScore: CText = new CText();
-  heightScore: number = 0;
+export default class ScenesPlay extends Scenes {
+  btnStart: ImageObject = new ImageObject();
+
   timer: number = 0;
   velocity: number = -3;
-  bgGameOver: CRectangle = new CRectangle();
+  jumpVelocity: number = -13;
+
+  textScore: Text = new Text();
+  textHightScore: Text = new Text();
+  heightScore: number = 0;
+  score: number = 0;
+
+  btnRestart: ImageSpriteObject = new ImageSpriteObject();
+  txtGameOver: ImageSpriteObject = new ImageSpriteObject();
+  bgGameOver: Rectangle = new Rectangle();
+  gameOver: boolean = false;
+
+  player: ImageAnimationObject = new ImageAnimationObject();
+
+  maxCloud: number = 6;
+  arrCloud: Array<ImageSpriteObject> = [];
+
+  obstaclesCactus: Array<ImageSpriteObject> = [];
+  obstaclesPTerodactyl: Array<ImageAnimationObject> = [];
+
+  arrGround: Array<ImageSpriteObject> = [];
+
   constructor() {
     super("play");
   }
   preload() {}
   create() {
     this.createGround();
-    //draw cloud
-    this.createCloud();
     //draw Animation
     this.createPlayer();
     //draw Obstacles
     this.createObstacles();
     this.createScore();
     //create event input
-    this.createEvent();
     this.createGameOver();
     this.bgGameOver = this.add.rectangular(0, 0, 800, 400, "rgba(0,0,0,.3)");
-    this.bgGameOver.isDraw = false;
+    this.bgGameOver.isVisible = false;
+    this.createEvent();
   }
   createGameOver() {
     this.btnRestart = this.add.imageSprite(
@@ -52,7 +59,7 @@ export default class ScenesPlay extends CScenes {
       "mainSprite",
       "btnRestart"
     );
-    this.btnRestart.setIsDraw(false);
+    this.btnRestart.setIsVisible(false);
     this.txtGameOver = this.add.imageSprite(
       300,
       110,
@@ -61,19 +68,11 @@ export default class ScenesPlay extends CScenes {
       "mainSprite",
       "txtGameOver"
     );
-    this.txtGameOver.setIsDraw(false);
+    this.txtGameOver.setIsVisible(false);
   }
   createScore() {
-    this.textScore = this.add.text(
-      "TextForScore",
-      600,
-      30,
-      "Score: 0",
-      "Arial",
-      20
-    );
+    this.textScore = this.add.text(600, 30, "Score: 0", "Arial", 20);
     this.textHightScore = this.add.text(
-      "TextForScore",
       600,
       60,
       `Hight Score: ${this.heightScore}`,
@@ -89,45 +88,50 @@ export default class ScenesPlay extends CScenes {
       this.add.imageSprite(1600, 320, 1600, 30, "mainSprite", "ground")
     );
   }
-  createCloud() {
-    this.arrCloud.push(
-      this.add.imageSprite(800, 0, 100, 50, "mainSprite", "cloud")
-    );
-  }
 
   createPlayer() {
-    this.player = <CAnimation>(
-      this.add.spriteSheet(15, 290, 60, 70, "mainSprite")
-    );
+    this.player = this.add.spriteSheet(15, 290, 60, 70);
+
     let configRunPlayer = {
       key: "RunPlayer",
-      frames: ["run1", "run2"],
+      frames: {
+        nameImage: "mainSprite",
+        frames: ["run1", "run2"],
+      },
       frameRate: 60,
-      repeat: -1,
     };
+
     let configDuckPlayer = {
       key: "DuckPlayer",
-      frames: ["duck1", "duck2"],
+      frames: {
+        nameImage: "mainSprite",
+        frames: ["duck1", "duck2"],
+      },
       frameRate: 60,
-      repeat: -1,
     };
+
     let configJumpPlayer = {
       key: "JumpPlayer",
-      frames: ["jump"],
+      frames: {
+        nameImage: "mainSprite",
+        frames: ["jump"],
+      },
       frameRate: 60,
-      repeat: -1,
     };
+
     let configDiePlayer = {
       key: "DiePlayer",
-      frames: ["die"],
+      frames: {
+        nameImage: "mainSprite",
+        frames: ["die"],
+      },
       frameRate: 60,
-      repeat: -1,
     };
+
     this.animation.create(configRunPlayer);
     this.animation.create(configDuckPlayer);
     this.animation.create(configJumpPlayer);
     this.animation.create(configDiePlayer);
-    this.player.drawSingleAnimation.y = 290;
     this.player.play("RunPlayer");
   }
   createEvent() {
@@ -142,17 +146,17 @@ export default class ScenesPlay extends CScenes {
     });
     this.input.keydown("ArrowDown", () => {
       if (this.player.nameAnimation === "RunPlayer") {
-        this.player.drawSingleAnimation.y = 295;
-        this.player.drawSingleAnimation.width = 70;
-        this.player.drawSingleAnimation.height = 55;
+        this.player.getPosition().y = 295;
+        this.player.getSize().width = 70;
+        this.player.getSize().height = 55;
         this.player.play("DuckPlayer");
       }
     });
     this.input.keyup("ArrowDown", () => {
       if (this.player.nameAnimation === "DuckPlayer") {
-        this.player.drawSingleAnimation.y = 290;
-        this.player.drawSingleAnimation.width = 60;
-        this.player.drawSingleAnimation.height = 70;
+        this.player.getPosition().y = 290;
+        this.player.getSize().width = 60;
+        this.player.getSize().height = 70;
         this.player.play("RunPlayer");
       }
     });
@@ -171,27 +175,22 @@ export default class ScenesPlay extends CScenes {
           this.obstaclesCactus = [];
           this.score = 0;
           this.timer = 0;
-          this.bgGameOver.isDraw = false;
+          this.bgGameOver.isVisible = false;
           this.changeScenes("start");
         }
       }
     });
   }
   createObstacles() {
-    // this.obstaclesCactus.push(
-    //   this.add.imageSprite(800, 295, 30, 45, "mainSprite", "cactusSmall")
-    // );
     let configObstaclesPterodactyl = {
       key: "PTerodactyl",
-      frames: ["PTerodactyl1", "PTerodactyl2"],
+      frames: {
+        nameImage: "mainSprite",
+        frames: ["PTerodactyl1", "PTerodactyl2"],
+      },
       frameRate: 30,
-      repeat: -1,
     };
     this.animation.create(configObstaclesPterodactyl);
-    this.obstaclesPTerodactyl.push(
-      <CAnimation>this.add.spriteSheet(1000, 265, 50, 30, "mainSprite")
-    );
-    this.obstaclesPTerodactyl[0].play("PTerodactyl");
   }
   //======================================== update
   update() {
@@ -201,19 +200,19 @@ export default class ScenesPlay extends CScenes {
       this.updateObstacles();
       this.updateCloud();
       this.updatePlayerJump();
-      this.CollisionDetection();
+      this.handleCollision();
     } else {
       this.updateHightScore();
-      this.bgGameOver.isDraw = true;
-      this.btnRestart.setIsDraw(true);
-      this.txtGameOver.setIsDraw(true);
+      this.bgGameOver.setIsVisible(true);
+      this.btnRestart.setIsVisible(true);
+      this.txtGameOver.setIsVisible(true);
     }
   }
   updateGround() {
     if (this.arrGround.length > 0) {
-      this.arrGround[0].position.x += this.velocity;
-      this.arrGround[1].position.x += this.velocity;
-      if (this.arrGround[0].position.x < -1600) {
+      this.arrGround[0].getPosition().x += this.velocity;
+      this.arrGround[1].getPosition().x += this.velocity;
+      if (this.arrGround[0].getPosition().x < -1600) {
         this.arrGround[0].destroy();
         this.arrGround.splice(0, 1);
         this.arrGround.push(
@@ -237,35 +236,39 @@ export default class ScenesPlay extends CScenes {
   updateObstacles() {
     let lengthCactus = this.obstaclesCactus.length;
     let lengthPterodactyl = this.obstaclesPTerodactyl.length;
+
     if (lengthCactus > 0) {
-      this.obstaclesCactus.forEach((_e) => (_e.position.x += this.velocity));
-    }
-    if (lengthPterodactyl > 0) {
-      this.obstaclesPTerodactyl.forEach(
-        (_e) => (_e.drawSingleAnimation.x += this.velocity - 1)
+      this.obstaclesCactus.forEach((_e) =>
+        _e.setPositionX(this.velocity + _e.getPositionX())
       );
     }
+
+    if (lengthPterodactyl > 0) {
+      this.obstaclesPTerodactyl.forEach((_e) =>
+        _e.setPositionX(this.velocity - 1 + _e.getPositionX())
+      );
+    }
+
     let maxWidth = 0;
     if (lengthCactus > 0 && lengthPterodactyl > 0) {
       maxWidth = Math.max(
-        this.obstaclesCactus[lengthCactus - 1].position.x +
-          this.obstaclesCactus[lengthCactus - 1].width,
-        this.obstaclesPTerodactyl[lengthPterodactyl - 1].drawSingleAnimation.x +
-          this.obstaclesPTerodactyl[lengthPterodactyl - 1].drawSingleAnimation
-            .width
+        this.obstaclesCactus[lengthCactus - 1].getPosition().x +
+          this.obstaclesCactus[lengthCactus - 1].getSize().width,
+        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getPosition().x +
+          this.obstaclesPTerodactyl[lengthPterodactyl - 1].getSize().width
       );
     } else if (lengthCactus > 0 && lengthPterodactyl === 0) {
       maxWidth =
-        this.obstaclesCactus[lengthCactus - 1].position.x +
-        this.obstaclesCactus[lengthCactus - 1].width;
+        this.obstaclesCactus[lengthCactus - 1].getPosition().x +
+        this.obstaclesCactus[lengthCactus - 1].getSize().width;
     } else if (lengthCactus === 0 && lengthPterodactyl > 0) {
       maxWidth =
-        this.obstaclesPTerodactyl[lengthPterodactyl - 1].drawSingleAnimation.x +
-        this.obstaclesPTerodactyl[lengthPterodactyl - 1].drawSingleAnimation
-          .width;
+        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getPosition().x +
+        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getSize().width;
     }
 
     let randomGap = this.getRandom(300, 600);
+
     if (maxWidth + randomGap < 800) {
       let randomType = this.getRandom(1, 2); //1 cactus 2 pterodactyl
       switch (randomType) {
@@ -299,32 +302,31 @@ export default class ScenesPlay extends CScenes {
           let height = [290, 265, 240];
           let randomHeight = this.getRandom(0, 2);
           this.obstaclesPTerodactyl.push(
-            this.add.spriteSheet(
-              800,
-              height[randomHeight],
-              50,
-              30,
-              "mainSprite"
-            )
+            this.add.spriteSheet(800, height[randomHeight], 50, 30)
           );
-          this.obstaclesPTerodactyl[lengthPterodactyl].play("PTerodactyl");
+          this.obstaclesPTerodactyl[this.obstaclesPTerodactyl.length - 1].play(
+            "PTerodactyl"
+          );
 
           break;
       }
     }
+
     if (this.obstaclesCactus.length > 0) {
       if (
-        this.obstaclesCactus[0].position.x + this.obstaclesCactus[0].width <
+        this.obstaclesCactus[0].getPosition().x +
+          this.obstaclesCactus[0].size.width <
         0
       ) {
         this.obstaclesCactus[0].destroy();
         this.obstaclesCactus.splice(0, 1);
       }
     }
+
     if (this.obstaclesPTerodactyl.length > 0) {
       if (
-        this.obstaclesPTerodactyl[0].drawSingleAnimation.x +
-          this.obstaclesPTerodactyl[0].drawSingleAnimation.width <
+        this.obstaclesPTerodactyl[0].getPosition().x +
+          this.obstaclesPTerodactyl[0].getSize().width <
         0
       ) {
         this.obstaclesPTerodactyl[0].destroy();
@@ -333,52 +335,25 @@ export default class ScenesPlay extends CScenes {
     }
   }
   updatePlayerJump() {
-    if (this.player.nameAnimation === "JumpPlayer") {
+    if (this.player.getNameAnimation() === "JumpPlayer") {
       this.jumpVelocity += 0.3 * 1.1;
-      this.player.drawSingleAnimation.y += this.jumpVelocity;
-      if (this.player.drawSingleAnimation.y > 290) {
+      this.player.getPosition().y += this.jumpVelocity;
+      if (this.player.getPosition().y > 290) {
         this.jumpVelocity = -13;
-        this.player.drawSingleAnimation.y = 290;
+        this.player.getPosition().y = 290;
         this.player.play("RunPlayer");
       }
     }
   }
-  CollisionDetection() {
+  handleCollision() {
     if (this.obstaclesCactus.length > 0) {
-      if (
-        this.obstaclesCactus[0].position.x + this.obstaclesCactus[0].width >
-          this.player.drawSingleAnimation.x &&
-        this.obstaclesCactus[0].position.x <
-          this.player.drawSingleAnimation.x +
-            this.player.drawSingleAnimation.width &&
-        this.obstaclesCactus[0].position.y + this.obstaclesCactus[0].height >
-          this.player.drawSingleAnimation.y &&
-        this.obstaclesCactus[0].position.y <
-          this.player.drawSingleAnimation.y +
-            this.player.drawSingleAnimation.height
-      ) {
+      if (this.collectionDetection(this.player, this.obstaclesCactus[0])) {
         this.gameOver = true;
         this.player.play("DiePlayer");
       }
     }
-    if (
-      this.obstaclesPTerodactyl.length > 0 &&
-      this.player.drawSingleAnimation !== undefined
-    ) {
-      if (
-        this.obstaclesPTerodactyl[0].drawSingleAnimation.x +
-          this.obstaclesPTerodactyl[0].drawSingleAnimation.width >
-          this.player.drawSingleAnimation.x &&
-        this.obstaclesPTerodactyl[0].drawSingleAnimation.x <
-          this.player.drawSingleAnimation.x +
-            this.player.drawSingleAnimation.width &&
-        this.obstaclesPTerodactyl[0].drawSingleAnimation.y +
-          this.obstaclesPTerodactyl[0].drawSingleAnimation.height >
-          this.player.drawSingleAnimation.y &&
-        this.obstaclesPTerodactyl[0].drawSingleAnimation.y <
-          this.player.drawSingleAnimation.y +
-            this.player.drawSingleAnimation.height
-      ) {
+    if (this.obstaclesPTerodactyl.length > 0) {
+      if (this.collectionDetection(this.player, this.obstaclesPTerodactyl[0])) {
         this.gameOver = true;
         this.player.play("DiePlayer");
       }
@@ -390,12 +365,12 @@ export default class ScenesPlay extends CScenes {
       if (
         this.arrCloud.length < this.maxCloud &&
         this.arrCloud[this.arrCloud.length - 1].position.x +
-          this.arrCloud[this.arrCloud.length - 1].width <
+          this.arrCloud[this.arrCloud.length - 1].size.width <
           this.getRandom(500, 800)
       ) {
         let width = this.getRandom(40, 100);
         let y = this.getRandom(0, 250);
-        let _cloud: CImageSprite = this.add.imageSprite(
+        let _cloud = this.add.imageSprite(
           800,
           y,
           width,
@@ -405,10 +380,22 @@ export default class ScenesPlay extends CScenes {
         );
         this.arrCloud.push(_cloud);
       }
-      if (this.arrCloud[0].position.x + this.arrCloud[0].width < 0) {
+      if (this.arrCloud[0].position.x + this.arrCloud[0].size.width < 0) {
         this.arrCloud[0].destroy();
         this.arrCloud.splice(0, 1);
       }
+    } else {
+      let width = this.getRandom(40, 100);
+      let y = this.getRandom(0, 250);
+      let _cloud = this.add.imageSprite(
+        800,
+        y,
+        width,
+        width / 1.5,
+        "mainSprite",
+        "cloud"
+      );
+      this.arrCloud.push(_cloud);
     }
   }
   getRandom(min: number, max: number) {
