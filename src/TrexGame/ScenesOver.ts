@@ -54,7 +54,7 @@ export default class ScenesOver extends Scenes {
     this.createTextScore();
     this.createTextHeightScore();
     this.createEvent();
-    this.bgGameOver = this.add.rectangular(0, 0, 800, 400, "rgba(0,0,0,.3)");
+    this.bgGameOver = this.add.rectangular(0, 0, 800, 400, "rgba(0,0,0,.2)");
   }
   createBtnRestart() {
     this.btnRestart = this.add.imageSprite(

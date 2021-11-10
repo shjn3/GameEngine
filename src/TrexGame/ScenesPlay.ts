@@ -340,13 +340,22 @@ export default class ScenesPlay extends Scenes {
   }
   updateOverGame() {
     this.updateHeightScoreValue();
-    this.changeScenes("over", {
-      score: this.score,
-      heightScore: this.heightScore,
-    });
+    this.changeScenes(
+      "over",
+      {
+        score: this.score,
+        heightScore: this.heightScore,
+      },
+      false
+    );
     this.gameOver = false;
     this.arrCloud = [];
     this.arrGround = [];
+    if (this.obstaclesPTerodactyl.length > 0) {
+      this.obstaclesPTerodactyl.forEach((_e) => {
+        _e.play("PTerodactylOver");
+      });
+    }
     this.obstaclesPTerodactyl = [];
     this.obstaclesCactus = [];
     this.arrayUnitHeightScore = [];

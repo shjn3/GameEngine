@@ -311,10 +311,15 @@ var ScenesPlay = /** @class */ (function (_super) {
         this.changeScenes("over", {
             score: this.score,
             heightScore: this.heightScore
-        });
+        }, false);
         this.gameOver = false;
         this.arrCloud = [];
         this.arrGround = [];
+        if (this.obstaclesPTerodactyl.length > 0) {
+            this.obstaclesPTerodactyl.forEach(function (_e) {
+                _e.play("PTerodactylOver");
+            });
+        }
         this.obstaclesPTerodactyl = [];
         this.obstaclesCactus = [];
         this.arrayUnitHeightScore = [];

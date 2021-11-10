@@ -61,20 +61,22 @@ export default class Scenes implements IScenes {
     }
     return false;
   }
-  changeScenes(name: string, data?: any) {
+  changeScenes(name: string, data?: any, reset: boolean = true) {
     if (Game.SArrayScenes.length > 1) {
       Game.SArrayScenes.forEach((_e, index) => {
         if (_e.nameScenes === name) {
           if (Game.SIndexScenesVisible === index) {
             return;
           } else {
+            if (reset) {
+              Add.SArrayDrawImageAnimation = [];
+              Add.SArrayDrawImageFromSprite = [];
+              Add.SArrayDrawImage = [];
+              Add.SArrayShape = [];
+              Add.SArrayText = [];
+              Animation.SArrayConfigAnimation = [];
+            }
             Game.SIndexScenesVisible = index;
-            Add.SArrayDrawImageAnimation = [];
-            Add.SArrayDrawImageFromSprite = [];
-            Add.SArrayDrawImage = [];
-            Add.SArrayShape = [];
-            Add.SArrayText = [];
-            Animation.SArrayConfigAnimation = [];
             this.input.destroy();
             if (data) {
               _e.init(data);
