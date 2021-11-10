@@ -516,7 +516,7 @@ export default class ScenesPlay extends Scenes {
           this.getRandom(500, 800)
       ) {
         let width = this.getRandom(40, 100);
-        let y = this.getRandom(0, 250);
+        let y = this.getRandom(40, 250);
         let _cloud = this.add.imageSprite(
           800,
           y,
@@ -533,7 +533,7 @@ export default class ScenesPlay extends Scenes {
       }
     } else {
       let width = this.getRandom(40, 100);
-      let y = this.getRandom(0, 250);
+      let y = this.getRandom(40, 250);
       let _cloud = this.add.imageSprite(
         800,
         y,
