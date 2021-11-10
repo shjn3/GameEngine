@@ -32,7 +32,10 @@ export default class Game implements IGame {
     Game.SArrayScenes[0].active();
   }
   loop() {
-    window.requestAnimationFrame(() => this.loop());
+    setTimeout(
+      () => window.requestAnimationFrame(() => this.loop()),
+      1000 / 240
+    );
     Game.SArrayScenes[Game.SNumberScenesVisible].update();
     this.renderer.render();
   }

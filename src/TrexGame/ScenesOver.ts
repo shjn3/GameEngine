@@ -24,7 +24,7 @@ export default class ScenesOver extends Scenes {
   create() {
     this.createBtnRestart();
     this.txtGameOver = this.add.imageSprite(
-      300,
+      250,
       110,
       270,
       20,
@@ -38,7 +38,7 @@ export default class ScenesOver extends Scenes {
   }
   createBtnRestart() {
     this.btnRestart = this.add.imageSprite(
-      400,
+      350,
       150,
       70,
       60,
@@ -49,8 +49,8 @@ export default class ScenesOver extends Scenes {
   createEvent() {
     this.input.onClick((e) => {
       if (
-        e.offsetX > 400 &&
-        e.offsetX < 470 &&
+        e.offsetX > 350 &&
+        e.offsetX < 420 &&
         e.offsetY > 150 &&
         e.offsetY < 210
       ) {

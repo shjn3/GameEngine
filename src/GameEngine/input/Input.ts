@@ -4,11 +4,13 @@ interface IInput {
   keydown(key: string, callback: () => void): void;
   keyup(key: string, callback: () => void): void;
   onClick(callback: (e: MouseEvent) => void): void;
-  // removeOnClick(callback: (e: MouseEvent) => void): void;
 }
 
 export default class Input implements IInput {
-  arrayEvent: Array<any> = [];
+  arrayEvent: Array<{
+    type: string;
+    function: any;
+  }> = [];
   constructor() {}
   keydown(key: string, callback: () => void) {
     let functionKeyDown = (e: KeyboardEvent) => {
