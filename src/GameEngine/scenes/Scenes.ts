@@ -11,9 +11,6 @@ interface IScenes {
   input: Input;
   nameScenes: string;
   idRequestAnimation: number;
-  // isActive: boolean;
-
-  // setIsActive(isActive: boolean): void;
   //use method when scenes active
   active(): void;
   //load image
@@ -38,21 +35,15 @@ export default class Scenes implements IScenes {
     this.preload();
   }
   init(data?: any) {}
-  //check Scenes is show on screen
-  // setIsActive(isActive: boolean) {
-  //   this.isActive = isActive;
-  // }
   //use method when scenes active
   active() {
     this.create();
   }
-  //load image
   preload() {}
-  //create image before update
   create() {}
 
   update() {}
-  //
+
   collectionDetection(player: BaseObject, obstacles: BaseObject) {
     if (player && obstacles) {
       let playerSize = player.getSize(),
@@ -74,10 +65,10 @@ export default class Scenes implements IScenes {
     if (Game.SArrayScenes.length > 1) {
       Game.SArrayScenes.forEach((_e, index) => {
         if (_e.nameScenes === name) {
-          if (Game.SNumberScenesVisible === index) {
+          if (Game.SIndexScenesVisible === index) {
             return;
           } else {
-            Game.SNumberScenesVisible = index;
+            Game.SIndexScenesVisible = index;
             Add.SArrayDrawImageAnimation = [];
             Add.SArrayDrawImageFromSprite = [];
             Add.SArrayDrawImage = [];
@@ -85,7 +76,6 @@ export default class Scenes implements IScenes {
             Add.SArrayText = [];
             Animation.SArrayConfigAnimation = [];
             this.input.destroy();
-            // this.isActive = false;
             if (data) {
               _e.init(data);
             }

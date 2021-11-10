@@ -11,7 +11,7 @@ export default class Game implements IGame {
   static SCtx: CanvasRenderingContext2D;
   static SFps: number = 60;
   static SArrayScenes: Array<Scenes> = [];
-  static SNumberScenesVisible: number = 0;
+  static SIndexScenesVisible: number = 0;
   renderer: Renderer = new Renderer();
   constructor(config: any = {}) {
     const { width, height, parent, scenes = [], fps } = config;
@@ -26,17 +26,17 @@ export default class Game implements IGame {
       scenes.forEach((_e: any) => Game.SArrayScenes.push(new _e()));
     }
     this.init();
-    this.loop();
   }
   init() {
     Game.SArrayScenes[0].active();
+    this.loop();
   }
   loop() {
     setTimeout(
       () => window.requestAnimationFrame(() => this.loop()),
       1000 / 240
     );
-    Game.SArrayScenes[Game.SNumberScenesVisible].update();
+    Game.SArrayScenes[Game.SIndexScenesVisible].update();
     this.renderer.render();
   }
 }
