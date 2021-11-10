@@ -155,7 +155,6 @@ export default class ScenesStart extends Scenes {
       e.offsetY < 250
     ) {
       this.changeScenes("play");
-      this.input.removeOnClick(this.onClickStart);
     }
   }
 }

@@ -150,6 +150,7 @@ export default class Add implements IAdd {
     temp.setPosition(x, y);
     temp.setSize(width, height);
     temp.setColor(color);
+    temp.setIsVisible(true);
     Add.SArrayShape.push(temp);
     return temp;
   }

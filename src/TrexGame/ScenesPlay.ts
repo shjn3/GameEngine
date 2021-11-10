@@ -44,31 +44,7 @@ export default class ScenesPlay extends Scenes {
     //draw Obstacles
     this.createObstacles();
     this.createScore();
-    //create event input
-    this.createGameOver();
-    this.bgGameOver = this.add.rectangular(0, 0, 800, 400, "rgba(0,0,0,.3)");
-    this.bgGameOver.isVisible = false;
     this.createEvent();
-  }
-  createGameOver() {
-    this.btnRestart = this.add.imageSprite(
-      400,
-      150,
-      70,
-      60,
-      "mainSprite",
-      "btnRestart"
-    );
-    this.btnRestart.setIsVisible(false);
-    this.txtGameOver = this.add.imageSprite(
-      300,
-      110,
-      270,
-      20,
-      "mainSprite",
-      "txtGameOver"
-    );
-    this.txtGameOver.setIsVisible(false);
   }
   createScore() {
     this.textScore = this.add.text(600, 30, "Score: 0", "Arial", 20);
@@ -160,26 +136,6 @@ export default class ScenesPlay extends Scenes {
         this.player.play("RunPlayer");
       }
     });
-    this.input.onClick((e: MouseEvent) => {
-      if (this.gameOver) {
-        if (
-          e.offsetX > 400 &&
-          e.offsetX < 470 &&
-          e.offsetY > 150 &&
-          e.offsetY < 210
-        ) {
-          this.gameOver = false;
-          this.arrCloud = [];
-          this.arrGround = [];
-          this.obstaclesPTerodactyl = [];
-          this.obstaclesCactus = [];
-          this.score = 0;
-          this.timer = 0;
-          this.bgGameOver.isVisible = false;
-          this.changeScenes("start");
-        }
-      }
-    });
   }
   createObstacles() {
     let configObstaclesPterodactyl = {
@@ -190,7 +146,16 @@ export default class ScenesPlay extends Scenes {
       },
       frameRate: 30,
     };
+    let configObstaclesPterodactylOver = {
+      key: "PTerodactylOver",
+      frames: {
+        nameImage: "mainSprite",
+        frames: ["PTerodactyl1"],
+      },
+      frameRate: 30,
+    };
     this.animation.create(configObstaclesPterodactyl);
+    this.animation.create(configObstaclesPterodactylOver);
   }
   //======================================== update
   update() {
@@ -202,11 +167,23 @@ export default class ScenesPlay extends Scenes {
       this.updatePlayerJump();
       this.handleCollision();
     } else {
-      this.updateHightScore();
-      this.bgGameOver.setIsVisible(true);
-      this.btnRestart.setIsVisible(true);
-      this.txtGameOver.setIsVisible(true);
+      this.updateOverGame();
     }
+  }
+  updateOverGame() {
+    this.updateHightScore();
+    this.changeScenes("over", {
+      score: this.score,
+      heightScore: this.heightScore,
+    });
+    this.gameOver = false;
+    this.arrCloud = [];
+    this.arrGround = [];
+    this.obstaclesPTerodactyl = [];
+    this.obstaclesCactus = [];
+    this.score = 0;
+    this.timer = 0;
+    this.bgGameOver.isVisible = false;
   }
   updateGround() {
     if (this.arrGround.length > 0) {
