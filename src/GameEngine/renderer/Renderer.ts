@@ -4,7 +4,14 @@ import Rectangle from "../shape/Rectangle";
 export default class Renderer {
   constructor() {}
   render() {
-    Game.SCtx.clearRect(0, 0, Game.SCanvas.width, Game.SCanvas.height);
+    this.clearCtx();
+    this.drawImage();
+    this.drawImageFromSprite();
+    this.drawImageAnimation();
+    this.drawText();
+    this.drawShape();
+  }
+  drawImage() {
     if (Add.SArrayDrawImage.length > 0) {
       Add.SArrayDrawImage.forEach((_e) => {
         if (_e.isVisible) {
@@ -17,7 +24,8 @@ export default class Renderer {
         }
       });
     }
-    //draw image from sprite
+  }
+  drawImageFromSprite() {
     if (Add.SArrayDrawImageFromSprite.length > 0) {
       Add.SArrayDrawImageFromSprite.forEach((_e) => {
         if (_e.isVisible) {
@@ -42,8 +50,8 @@ export default class Renderer {
         }
       });
     }
-
-    //draw image with animation
+  }
+  drawImageAnimation() {
     if (Add.SArrayDrawImageAnimation.length > 0) {
       Add.SArrayDrawImageAnimation.forEach((_e) => {
         if (_e.isVisible) {
@@ -88,7 +96,8 @@ export default class Renderer {
         }
       });
     }
-    //draw Text
+  }
+  drawText() {
     if (Add.SArrayText.length > 0) {
       Add.SArrayText.forEach((_e) => {
         let text = _e.getText();
@@ -100,7 +109,8 @@ export default class Renderer {
         Game.SCtx.fillText(`${text}`, x, y);
       });
     }
-    //draw Shape
+  }
+  drawShape() {
     if (Add.SArrayShape.length > 0) {
       Add.SArrayShape.forEach((_e) => {
         if (_e instanceof Rectangle) {
@@ -115,5 +125,8 @@ export default class Renderer {
         }
       });
     }
+  }
+  clearCtx() {
+    Game.SCtx.clearRect(0, 0, Game.SCanvas.width, Game.SCanvas.height);
   }
 }
