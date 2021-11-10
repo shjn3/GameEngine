@@ -1,9 +1,7 @@
 import Scenes from "../GameEngine/scenes/Scenes";
-import Animation from "../GameEngine/animation/Animation";
 import ImageObject from "../GameEngine/image/ImageObject";
 import ImageSpriteObject from "../GameEngine/image/ImageSpriteObject";
 import Text from "../GameEngine/text/Text";
-import Rectangle from "../GameEngine/shape/Rectangle";
 import ImageAnimationObject from "../GameEngine/image/ImageAnimationObject";
 
 export default class ScenesPlay extends Scenes {
@@ -18,9 +16,6 @@ export default class ScenesPlay extends Scenes {
   heightScore: number = 0;
   score: number = 0;
 
-  btnRestart: ImageSpriteObject = new ImageSpriteObject();
-  txtGameOver: ImageSpriteObject = new ImageSpriteObject();
-  bgGameOver: Rectangle = new Rectangle();
   gameOver: boolean = false;
 
   player: ImageAnimationObject = new ImageAnimationObject();
@@ -284,7 +279,6 @@ export default class ScenesPlay extends Scenes {
     this.obstaclesCactus = [];
     this.score = 0;
     this.timer = 0;
-    this.bgGameOver.isVisible = false;
   }
   updateGround() {
     if (this.arrGround.length > 0) {
@@ -311,43 +305,16 @@ export default class ScenesPlay extends Scenes {
       this.textScore.setText(`Score: ${this.score}`);
     }
   }
+  //update Obstacles
   updateObstacles() {
-    let lengthCactus = this.obstaclesCactus.length;
-    let lengthPterodactyl = this.obstaclesPTerodactyl.length;
+    this.updatePositionObstacles();
 
-    if (lengthCactus > 0) {
-      this.obstaclesCactus.forEach((_e) =>
-        _e.setPositionX(this.velocity + _e.getPositionX())
-      );
-    }
-
-    if (lengthPterodactyl > 0) {
-      this.obstaclesPTerodactyl.forEach((_e) =>
-        _e.setPositionX(this.velocity - 1 + _e.getPositionX())
-      );
-    }
-
-    let maxWidth = 0;
-    if (lengthCactus > 0 && lengthPterodactyl > 0) {
-      maxWidth = Math.max(
-        this.obstaclesCactus[lengthCactus - 1].getPosition().x +
-          this.obstaclesCactus[lengthCactus - 1].getSize().width,
-        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getPosition().x +
-          this.obstaclesPTerodactyl[lengthPterodactyl - 1].getSize().width
-      );
-    } else if (lengthCactus > 0 && lengthPterodactyl === 0) {
-      maxWidth =
-        this.obstaclesCactus[lengthCactus - 1].getPosition().x +
-        this.obstaclesCactus[lengthCactus - 1].getSize().width;
-    } else if (lengthCactus === 0 && lengthPterodactyl > 0) {
-      maxWidth =
-        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getPosition().x +
-        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getSize().width;
-    }
+    let getSumPositionAndWidthLastObstacles =
+      this.getSumPositionAndWidthLastObstacles();
 
     let randomGap = this.getRandom(300, 600);
 
-    if (maxWidth + randomGap < 800) {
+    if (getSumPositionAndWidthLastObstacles + randomGap < 800) {
       let randomType = this.getRandom(1, 2); //1 cactus 2 pterodactyl
       switch (randomType) {
         case 1:
@@ -377,10 +344,10 @@ export default class ScenesPlay extends Scenes {
           }
           break;
         case 2:
-          let height = [290, 265, 240];
-          let randomHeight = this.getRandom(0, 2);
+          let positionYPterodactyl = [290, 265, 240];
+          let randomIndex = this.getRandom(0, 2);
           this.obstaclesPTerodactyl.push(
-            this.add.spriteSheet(800, height[randomHeight], 50, 30)
+            this.add.spriteSheet(800, positionYPterodactyl[randomIndex], 50, 30)
           );
           this.obstaclesPTerodactyl[this.obstaclesPTerodactyl.length - 1].play(
             "PTerodactyl"
@@ -389,7 +356,32 @@ export default class ScenesPlay extends Scenes {
           break;
       }
     }
-
+    this.decreaseObstacles();
+  }
+  getSumPositionAndWidthLastObstacles() {
+    let lengthCactus = this.obstaclesCactus.length;
+    let lengthPterodactyl = this.obstaclesPTerodactyl.length;
+    if (lengthCactus > 0 && lengthPterodactyl > 0) {
+      return Math.max(
+        this.obstaclesCactus[lengthCactus - 1].getPosition().x +
+          this.obstaclesCactus[lengthCactus - 1].getSize().width,
+        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getPosition().x +
+          this.obstaclesPTerodactyl[lengthPterodactyl - 1].getSize().width
+      );
+    } else if (lengthCactus > 0 && lengthPterodactyl === 0) {
+      return (
+        this.obstaclesCactus[lengthCactus - 1].getPosition().x +
+        this.obstaclesCactus[lengthCactus - 1].getSize().width
+      );
+    } else if (lengthCactus === 0 && lengthPterodactyl > 0) {
+      return (
+        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getPosition().x +
+        this.obstaclesPTerodactyl[lengthPterodactyl - 1].getSize().width
+      );
+    }
+    return 0;
+  }
+  decreaseObstacles() {
     if (this.obstaclesCactus.length > 0) {
       if (
         this.obstaclesCactus[0].getPosition().x +
@@ -412,6 +404,22 @@ export default class ScenesPlay extends Scenes {
       }
     }
   }
+  updatePositionObstacles() {
+    let lengthCactus = this.obstaclesCactus.length;
+    let lengthPterodactyl = this.obstaclesPTerodactyl.length;
+
+    if (lengthCactus > 0) {
+      this.obstaclesCactus.forEach((_e) =>
+        _e.setPositionX(this.velocity + _e.getPositionX())
+      );
+    }
+    if (lengthPterodactyl > 0) {
+      this.obstaclesPTerodactyl.forEach((_e) =>
+        _e.setPositionX(this.velocity - 1 + _e.getPositionX())
+      );
+    }
+  }
+  //update Player Jump
   updatePlayerJump() {
     if (this.player.getNameAnimation() === "JumpPlayer") {
       this.jumpVelocity += 0.3 * 1.1;

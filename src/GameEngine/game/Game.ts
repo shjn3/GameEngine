@@ -31,11 +31,8 @@ export default class Game implements IGame {
     this.loop();
   }
   loop() {
-    setTimeout(
-      () => window.requestAnimationFrame(() => this.loop()),
-      1000 / Game.SFps
-    );
     Game.SArrayScenes[Game.SIndexScenesVisible].update();
     this.renderer.render();
+    window.requestAnimationFrame(() => this.loop());
   }
 }
