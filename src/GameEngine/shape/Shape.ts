@@ -10,7 +10,7 @@ interface IShape {
   setPositionY(y: number): void;
   getPositionY(): void;
 }
-export default abstract class Shape implements IShape {
+export default class Shape implements IShape {
   position: IPosition = { x: 0, y: 0 };
   constructor() {}
   getPosition() {

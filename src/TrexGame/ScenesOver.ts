@@ -20,7 +20,27 @@ export default class ScenesOver extends Scenes {
     this.heightScore = data.heightScore;
   }
 
-  preload() {}
+  preload() {
+    const frameInSprite = [
+      {
+        key: "btnRestart",
+        sourcePosition: { x: 0, y: 0 },
+        sourceSize: {
+          width: 75,
+          height: 70,
+        },
+      },
+      {
+        key: "txtGameOver",
+        sourcePosition: { x: 955, y: 25 },
+        sourceSize: {
+          width: 380,
+          height: 30,
+        },
+      },
+    ];
+    this.load.addConfigImageSprite("mainSprite", frameInSprite);
+  }
   create() {
     this.createBtnRestart();
     this.txtGameOver = this.add.imageSprite(

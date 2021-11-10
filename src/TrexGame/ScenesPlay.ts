@@ -36,7 +36,108 @@ export default class ScenesPlay extends Scenes {
   constructor() {
     super("play");
   }
-  preload() {}
+  preload() {
+    const frameCloud = [
+      {
+        key: "cloud",
+        sourcePosition: { x: 165, y: 0 },
+        sourceSize: {
+          width: 100,
+          height: 30,
+        },
+      },
+    ];
+    const framePlayer = [
+      {
+        key: "run1",
+        sourcePosition: { x: 1511, y: 0 },
+        sourceSize: {
+          width: 95,
+          height: 110,
+        },
+      },
+      {
+        key: "run2",
+        sourcePosition: { x: 1599, y: 0 },
+        sourceSize: {
+          width: 95,
+          height: 110,
+        },
+      },
+
+      {
+        key: "duck1",
+        sourcePosition: { x: 1862, y: 0 },
+        sourceSize: {
+          width: 120,
+          height: 90,
+        },
+      },
+      //cw: 70, ch: 58, cY: 320 cX:15
+      {
+        key: "duck2",
+        sourcePosition: { x: 1982, y: 0 },
+        sourceSize: {
+          width: 120,
+          height: 90,
+        },
+      },
+      //cw: 60, ch:70, cY: 320 cx: 15
+      {
+        key: "jump",
+        sourcePosition: { x: 1335, y: 0 },
+        sourceSize: {
+          width: 95,
+          height: 110,
+        },
+      },
+      {
+        key: "die",
+        sourcePosition: { x: 1335, y: 0 },
+        sourceSize: {
+          width: 95,
+          height: 110,
+        },
+      },
+    ];
+    const frameObstacles = [
+      {
+        key: "cactusSmall",
+        sourcePosition: { x: 616, y: 0 },
+        sourceSize: {
+          width: 34,
+          height: 70,
+        },
+      },
+      {
+        key: "cactusLarge",
+        sourcePosition: { x: 650, y: 0 },
+        sourceSize: {
+          width: 50,
+          height: 80,
+        },
+      },
+      {
+        key: "PTerodactyl1",
+        sourcePosition: { x: 260, y: 0 },
+        sourceSize: {
+          width: 90,
+          height: 70,
+        },
+      },
+      {
+        key: "PTerodactyl2",
+        sourcePosition: { x: 350, y: 0 },
+        sourceSize: {
+          width: 90,
+          height: 70,
+        },
+      },
+    ];
+    this.load.addConfigImageSprite("mainSprite", framePlayer);
+    this.load.addConfigImageSprite("mainSprite", frameObstacles);
+    this.load.addConfigImageSprite("mainSprite", frameCloud);
+  }
   create() {
     this.createGround();
     //draw Animation

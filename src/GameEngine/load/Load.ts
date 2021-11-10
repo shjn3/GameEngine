@@ -34,4 +34,16 @@ export default class Load implements ILoad {
     _imageSpriteTemp.setKey(Math.floor(Math.random() * Date.now()));
     Load.SArraySpriteSheet.push(_imageSpriteTemp);
   }
+  addConfigImageSprite(
+    nameImage: string,
+    frameInSprite: Array<IFrameInSprite>
+  ) {
+    if (Load.SArraySpriteSheet.length > 0) {
+      Load.SArraySpriteSheet.forEach((_e) => {
+        if (_e.nameImage === nameImage) {
+          _e.frameInSprite.push(...frameInSprite);
+        }
+      });
+    }
+  }
 }

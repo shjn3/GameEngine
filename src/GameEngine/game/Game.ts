@@ -21,7 +21,6 @@ export default class Game implements IGame {
     Game.SCanvas.width = width;
     Game.SCanvas.height = height;
     Game.SCtx = <CanvasRenderingContext2D>Game.SCanvas.getContext("2d");
-    // Game.arrScenes = scenes;
     if (scenes.length > 0) {
       scenes.forEach((_e: any) => Game.SArrayScenes.push(new _e()));
     }
