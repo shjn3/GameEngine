@@ -28,6 +28,9 @@ export default class ScenesPlay extends Scenes {
 
   arrGround: Array<ImageSpriteObject> = [];
 
+  arrayUnitScore: Array<ImageSpriteObject> = [];
+  arrayUnitHeightScore: Array<ImageSpriteObject> = [];
+
   constructor() {
     super("play");
   }
@@ -129,9 +132,29 @@ export default class ScenesPlay extends Scenes {
         },
       },
     ];
+    const frameNumber = [
+      {
+        key: "numberZero",
+        sourcePosition: { x: 952, y: 0 },
+        sourceSize: {
+          width: 20,
+          height: 25,
+        },
+      },
+      {
+        key: "HI",
+        sourcePosition: { x: 1152, y: 0 },
+        sourceSize: {
+          width: 40,
+          height: 25,
+        },
+      },
+    ];
+
     this.load.addConfigImageSprite("mainSprite", framePlayer);
     this.load.addConfigImageSprite("mainSprite", frameObstacles);
     this.load.addConfigImageSprite("mainSprite", frameCloud);
+    this.load.addConfigImageSprite("mainSprite", frameNumber);
   }
   create() {
     this.createGround();
@@ -139,10 +162,45 @@ export default class ScenesPlay extends Scenes {
     this.createPlayer();
     //draw Obstacles
     this.createObstacles();
+    this.createHeightScore();
+    // this.createTextScore();
     this.createScore();
     this.createEvent();
   }
   createScore() {
+    for (let i = 0; i < 5; i++) {
+      this.arrayUnitScore.push(
+        this.add.imageSprite(
+          700 + 20 * i,
+          20,
+          15,
+          15,
+          "mainSprite",
+          "numberZero"
+        )
+      );
+    }
+  }
+  createHeightScore() {
+    console.log(this.heightScore);
+    this.add.imageSprite(510, 20, 30, 15, "mainSprite", "HI");
+
+    for (let i = 0; i < 5; i++) {
+      this.arrayUnitHeightScore.push(
+        this.add.imageSprite(
+          550 + 20 * i,
+          20,
+          15,
+          15,
+          "mainSprite",
+          "numberZero"
+        )
+      );
+    }
+    this.updateUnit(this.heightScore, this.arrayUnitHeightScore);
+  }
+
+  createTextScore() {
     this.textScore = this.add.text(600, 30, "Score: 0", "Arial", 20);
     this.textHightScore = this.add.text(
       600,
@@ -257,17 +315,31 @@ export default class ScenesPlay extends Scenes {
   update() {
     if (!this.gameOver) {
       this.updateGround();
-      this.updateScore();
       this.updateObstacles();
       this.updateCloud();
       this.updatePlayerJump();
+      this.updateScoreValue();
+      this.updateUnit(this.score, this.arrayUnitScore);
       this.handleCollision();
     } else {
       this.updateOverGame();
     }
   }
+  updateHeightScore() {}
+  updateUnit(valueScore: number, arrayScore: Array<ImageSpriteObject>) {
+    let temp = valueScore.toString().split("");
+    let lengthTemp = temp.length;
+    for (let i = 0; i < lengthTemp - 1; i++) {
+      arrayScore[i].setSourcePositionX(952);
+    }
+    for (let i = 5 - lengthTemp; i < 5; i++) {
+      arrayScore[i].setSourcePositionX(
+        952 + 20 * parseInt(temp[-5 + i + lengthTemp])
+      );
+    }
+  }
   updateOverGame() {
-    this.updateHightScore();
+    this.updateHeightScoreValue();
     this.changeScenes("over", {
       score: this.score,
       heightScore: this.heightScore,
@@ -277,6 +349,8 @@ export default class ScenesPlay extends Scenes {
     this.arrGround = [];
     this.obstaclesPTerodactyl = [];
     this.obstaclesCactus = [];
+    this.arrayUnitHeightScore = [];
+    this.arrayUnitScore = [];
     this.score = 0;
     this.timer = 0;
   }
@@ -293,11 +367,12 @@ export default class ScenesPlay extends Scenes {
       }
     }
   }
-  updateHightScore() {
+
+  updateHeightScoreValue() {
     this.heightScore = Math.max(this.heightScore, this.score);
     this.textHightScore.setText(`Hight Score: ${this.heightScore}`);
   }
-  updateScore() {
+  updateScoreValue() {
     this.timer++;
     if (this.timer > 50) {
       this.timer = 0;
@@ -431,20 +506,6 @@ export default class ScenesPlay extends Scenes {
       }
     }
   }
-  handleCollision() {
-    if (this.obstaclesCactus.length > 0) {
-      if (this.collectionDetection(this.player, this.obstaclesCactus[0])) {
-        this.gameOver = true;
-        this.player.play("DiePlayer");
-      }
-    }
-    if (this.obstaclesPTerodactyl.length > 0) {
-      if (this.collectionDetection(this.player, this.obstaclesPTerodactyl[0])) {
-        this.gameOver = true;
-        this.player.play("DiePlayer");
-      }
-    }
-  }
   updateCloud() {
     if (this.arrCloud.length > 0) {
       this.arrCloud.forEach((_e) => (_e.position.x += this.velocity));
@@ -482,6 +543,20 @@ export default class ScenesPlay extends Scenes {
         "cloud"
       );
       this.arrCloud.push(_cloud);
+    }
+  }
+  handleCollision() {
+    if (this.obstaclesCactus.length > 0) {
+      if (this.collectionDetection(this.player, this.obstaclesCactus[0])) {
+        this.gameOver = true;
+        this.player.play("DiePlayer");
+      }
+    }
+    if (this.obstaclesPTerodactyl.length > 0) {
+      if (this.collectionDetection(this.player, this.obstaclesPTerodactyl[0])) {
+        this.gameOver = true;
+        this.player.play("DiePlayer");
+      }
     }
   }
   getRandom(min: number, max: number) {

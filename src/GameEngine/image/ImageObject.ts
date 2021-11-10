@@ -1,4 +1,5 @@
 import Add from "../add/Add";
+import Load from "../load/Load";
 import BaseObject from "../base/BaseObject";
 
 interface IImageObject {
@@ -71,5 +72,17 @@ export default class ImageObject extends BaseObject implements IImageObject {
     Add.SArrayDrawImage = Add.SArrayDrawImage.filter(
       (_e) => _e.key !== this.key
     );
+  }
+  changeImage(nameImage: string) {
+    if (nameImage !== this.nameImage) {
+      if (Load.SArrayImage.length > 0) {
+        Load.SArrayImage.forEach((_e) => {
+          if (_e.nameImage === nameImage) {
+            this.setImage(_e.image);
+            return;
+          }
+        });
+      }
+    }
   }
 }

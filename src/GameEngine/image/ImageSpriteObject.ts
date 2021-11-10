@@ -1,5 +1,6 @@
 import type { IFrameInSprite, IPosition, ISize } from "../utils/type";
 import Add from "../add/Add";
+import Load from "../load/Load";
 import ImageObject from "./ImageObject";
 
 interface IImageSpriteObject {
@@ -36,6 +37,28 @@ export default class ImageSpriteObject
     this.sourcePosition = { x: 0, y: 0 };
     this.sourceSize = { width: 0, height: 0 };
     this.frameInSprite = [];
+  }
+  setSourcePositionX(x: number) {
+    this.sourcePosition.x = x;
+  }
+
+  changeImageSprite(nameImage: string, keyFrame: string) {
+    if (Load.SArraySpriteSheet.length > 0) {
+      Load.SArraySpriteSheet.forEach((_e) => {
+        if (_e.nameImage === nameImage) {
+          _e.frameInSprite.forEach((__e) => {
+            if (__e.key === keyFrame) {
+              this.setSourcePosition(
+                __e.sourcePosition.x,
+                __e.sourcePosition.y
+              );
+              this.setSourceSize(__e.sourceSize.width, __e.sourceSize.height);
+              this.setImage(_e.image);
+            }
+          });
+        }
+      });
+    }
   }
   setSourceHeight(height: number) {
     this.sourceSize.height = height;
